@@ -1,0 +1,15 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+int main()
+{
+    int x,val_abs;
+    scanf("%d",&x);
+    if(x>=0)
+        val_abs=x;
+    else
+        val_abs=(-1)*x;
+
+    printf("Valoarea absoluta este: %d", val_abs);
+    return 0;
+}

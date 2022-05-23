@@ -1,0 +1,47 @@
+;Dinu Andreea-Violeta, grupa 161
+
+extern printf
+
+section .data
+number1 dq -25; numarul meu
+number2 dq 0
+number3 dq -1
+
+fmtint db "%s %ld", 10, 0;
+modul db "Valoarea absoluta este:", 0
+
+section .bss
+resulti resq 1
+
+section .text
+global main
+main:
+push rbp
+mov rbp, rsp
+mov rax, [number1]
+mov rbx, [number2]
+cmp rax, rbx;compara number1 cu 0
+jge greater ;daca nr este mai mare sau egal cu 0 => go to greater 
+
+mov rax, [number1]
+imul qword [number3];inmultesc cu -1 pentru a obtine valoarea pozitiva a numarului 
+mov [resulti], rax
+mov rsi, modul
+mov rdi, fmtint
+mov rdx, [resulti]
+mov rax, 0 
+call printf;afisare
+jmp exit ; jump la eticheta exit
+
+;daca numarul este mai mare sau egal ca 0 doar il afisez
+greater:
+mov rsi, modul
+mov rdi, fmtint
+mov rdx, [number1]
+mov rax, 0
+call printf
+
+exit:
+mov rsp, rbp
+pop rbp
+ret

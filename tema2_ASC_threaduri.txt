@@ -1,0 +1,83 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <pthread.h>
+#include <unistd.h>
+#include <string.h>
+
+int n,val_abs;
+
+void *print_message_function(void *ptr);
+int modul(int a);
+
+int main()
+{
+scanf("%d",&n);
+pthread_t thread1, thread2;
+
+const char *message1 = "Executie Thread 1";
+const char *message2 = "Executie Thread 2";
+
+int iret1, iret2;
+/* creare thread-uri independente care au functiile asociate corespunzatoare */
+iret1 = pthread_create( &thread1, NULL, print_message_function, (void*) message1);
+
+if(iret1)
+{
+fprintf(stderr,"Eroare - pthread_create() : %d\n",iret1);
+exit(EXIT_FAILURE);
+}
+iret2 = pthread_create( &thread2, NULL, print_message_function, (void*) message2);
+if(iret2)
+{
+fprintf(stderr,"Eroare - pthread_create() : %d\n",iret2);
+exit(EXIT_FAILURE);
+}
+
+printf("Rezultat pthread_create() : %d\n",iret1);
+printf("Rezultat pthread_create() : %d\n",iret2);
+
+/* se asteapta completarea instructinilor din cele doua threaduri */
+pthread_join( thread1, NULL);
+pthread_join( thread2, NULL);
+
+printf("Terminare thread!\nValoarea absoluta este %d\n",val_abs);
+return 0;
+}
+
+void *print_message_function(void *ptr)
+{
+char *message;
+char *mesajthread1="Executie Thread 1";
+message = (char *) ptr;
+printf("%s \n", message);
+sleep(1);
+if (strcmp(message,mesajthread1)==0)
+{
+printf("Executie thread 1#\n");
+// subprogram pentru thread 1
+   if(n>=0)
+    {   
+        printf("Thread 1#\n");
+        val_abs=n;
+    }
+
+}
+else
+{
+printf("Executie thread 2#\n");
+//subprogram pentru thread 2
+if(n<0)
+    {   
+        printf("Thread 2#\n");
+        val_abs=(-1)*n;
+    }
+}
+}
+
+int modul(int a) 
+{
+    if(n>=0) 
+       return 1;
+    else 
+       return 0;
+}
